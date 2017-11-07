@@ -50,3 +50,17 @@ svg{
 .active{
   font-weight: bold;
 }
+.photo{
+
+    background-repeat: no-repeat;
+}
+.tit{
+  font-size: 25px;
+}
+.notit{
+  font-size: 14px;
+  color:white;
+}
+label{
+  color: white;
+}
