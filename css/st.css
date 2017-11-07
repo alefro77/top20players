@@ -1,0 +1,52 @@
+svg{
+  font: 10px sans-serif;
+   position: absolute;
+   left: 250px;
+   top: 960px;
+}
+.node {
+  box-sizing: border-box;
+  position: absolute;
+  overflow: hidden;
+}
+
+.node-label {
+  padding: 4px;
+  line-height: 1em;
+  white-space: pre;
+  color: rgba(0,0,0,0.8);
+}
+
+.node-value {
+  color: rgba(0,0,0,0.8);
+  font-size: 9px;
+  margin-top: 1px;
+}
+.noder circle {
+  fill: #999;
+}
+
+.noder text {
+  font: 10px sans-serif;
+}
+
+.noder--internal circle {
+  fill: #555;
+}
+
+.noder--internal text {
+  text-shadow: 0 1px 0 #fff, 0 -1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff;
+}
+
+.link {
+  fill: none;
+  stroke: #555;
+  stroke-opacity: 0.4;
+  stroke-width: 1.5px;
+}
+.change{
+  cursor:pointer;
+}
+.active{
+  font-weight: bold;
+}

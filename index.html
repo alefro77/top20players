@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Luis Alejandro Franco M">
+
+    <title>FIFA 2018</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/resume.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/st.css">
+<style type="text/css">
+.photo{
+
+    background-repeat: no-repeat;
+}
+.tit{
+  font-size: 25px;
+}
+.notit{
+  font-size: 14px;
+}
+label{
+  color: white;
+}
+
+</style>
+  </head>
+
+  <body id="page-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
+      <a class="navbar-brand js-scroll-trigger" href="#page-top">
+        <div><span class="tit">Do you want to play? </span><br><span class="notit">Go on and find the top 20 of <br> what you need</span><br>---------------------</div>
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger active change" ck="Wage">Wage</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger change" ck="Value">Market Value</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger change" ck="Agility">Agility</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger change" ck="Ball control">Ball Control</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger change" ck="Free kick accuracy">Free kick accuracy</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger change" ck="Jumping">Jumping</a>
+          </li>
+          <li class="nav-item">
+            <label><input type="checkbox" value="" id="colpeople" class="active"> yes you can... Just Colombian Players</label>
+          </li>
+          
+        </ul>
+        
+      </div>
+      <div>
+          <ul class="navbar-nav">
+             <li class="nav-item">
+            <a class="nav-link js-scroll-trigger active change" href="alefro77">Github Repository</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger active change" href="https://www.kaggle.com/thec03u5/fifa-18-demo-player-dataset">Kaggle Dataset</a>
+          </li>
+
+          
+         </ul>
+        </div>
+    </nav>
+
+    <div class="container-fluid p-0">
+
+      <section class="resume-section p-3 p-lg-5 d-flex d-column" id="about">
+         <div class="treehere"></div>
+         <svg width="1000" height="1060"></svg>
+      </section>
+ 
+
+    </div>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="js/resume.min.js"></script>
+
+    <script src="//d3js.org/d3.v4.min.js"></script>
+<script>
+
+var arrD = [];
+var width = 1000,
+    height = 1060;
+
+var format = d3.format(",d");
+
+var color = d3.scaleOrdinal()
+    .range(d3.schemeCategory20
+        .map(function(c) { c = d3.rgb(c); c.opacity = 0.6; return c; }));
+
+
+
+
+
+//Radial
+
+
+
+
+d3.csv("cd.csv", function(error, data) {
+  if (error) throw error;
+  var int = ["Name", "Nationality", "Overall", "Value", "Wage", "Acceleration", "Agility", "Ball control", "Free kick accuracy", "Jumping", "Shot power", "Strength", "Club", "Photo"]
+  dat = [{"id": "top100", "value": ""}]; k = 1; arr= {};
+  data.forEach(function(d){
+    var temp = {}
+    for(var i in int){
+      if(int[i] == "Value" || int[i] == "Wage"){
+        var mul = (d[int[i]].substr(d[int[i]].length - 1) == "M")? 1000000:1;
+        temp[int[i]] = parseFloat(d[int[i]].replace("€", ""))*mul;
+      }
+      else if (int[i] == "Photo"){
+        temp[int[i]] = d[int[i]];
+      }else
+        temp[int[i]] = d[int[i]].replace(/\./g,' ');
+    }
+
+    arrD.push(temp);
+  });
+  update();
+});
+
+function update(item){
+  var item = (item)? item: "Wage"; 
+
+  arrD.sort(function(a, b) { 
+    return b[item] - a[item];
+  })
+  if($("#colpeople").prop("checked")){
+    var arrTemp = [];
+    for(var k in arrD){
+      if(arrD[k]["Nationality"] == "Colombia")
+          arrTemp.push(arrD[k])
+    }
+  }else
+  var arrTemp = arrD;
+  comp = arrTemp.slice(0,20);
+  var arr = {};
+  for(var d in comp){
+        if(!arr[comp[d]["Club"]]){ arr[comp[d]["Club"]] = {}; }
+        if(!arr[comp[d]["Club"]][comp[d]["Nationality"]]){ 
+          arr[comp[d]["Club"]][comp[d]["Nationality"]] = {}
+        }
+        arr[comp[d]["Club"]][comp[d]["Nationality"]][comp[d]["Name"]] = {"value": comp[d][item], "photo": comp[d]["Photo"]};  
+      
+  }
+  var def = {"name": "top20", "children": []};
+  for(var t in arr){
+    var temp = {"name": t, "children": []}
+    for(var p in arr[t]){
+      var temp1 = {"name": p, "children": []}
+      for(var j in arr[t][p])
+        temp1["children"].push({"name": j, "value": arr[t][p][j].value, "photo": arr[t][p][j].photo})
+      temp["children"].push(temp1);
+    }
+    def["children"].push(temp);
+  }
+
+  var tree = d3.cluster()
+    .size([2 * Math.PI, 500])
+    .separation(function(a, b) { return (a.parent == b.parent ? 1 : 2) / a.depth; });
+  
+  var one = d3.hierarchy(def);
+  var r2 = tree(one); 
+  $("svg g").remove();
+  var svg = d3.select("svg"),
+    width = +svg.attr("width"),
+    height = +svg.attr("height"),
+    g = svg.append("g").attr("transform", "translate(" + (width / 2 + 40) + "," + (height / 2 + 90) + ")");
+
+  var link = g.selectAll(".link")
+    .data(r2.links())
+    .enter().append("path")
+      .attr("class", "link")
+      .attr("d", d3.linkRadial()
+          .angle(function(d) { return d.x; })
+          .radius(function(d) { return (d.depth == 3)? d.y/1.5: d.y/1.2; }));
+
+  var node = g.selectAll(".noder")
+    .data(r2.descendants())
+    .enter().append("g")
+      .attr("class", function(d) { return "noder" + (d.children ? " node--internal" : " node--leaf"); })
+      .attr("transform", function(d) { return "translate(" + radialPoint(d.x, (d.depth == 3)? d.y/1.5: d.y/1.2) + ")"; });
+
+  node.append("circle")
+      .attr("r", 2.5);
+
+  node.append("text")
+      .attr("dy", "0.31em")
+      .attr("x", function(d) { return d.x < Math.PI === !d.children ? 6 : -6; })
+      .attr("text-anchor", function(d) { return d.x < Math.PI === !d.children ? "start" : "end"; })
+      .attr("transform", function(d) { return "rotate(" + (d.x < Math.PI ? d.x - Math.PI / 2 : d.x + Math.PI / 2) * 180 / Math.PI + ")"; })
+      .text(function(d) { return d.data.name }); 
+
+  
+
+  var treemap = d3.treemap()
+    .size([width, height])
+    .padding(1)
+    .round(true);
+
+  var root = one
+      .sum(function(d) { return d.value; })
+      .sort(function(a, b) { return b.height - a.height || b.value - a.value; });
+
+  treemap(root);
+  $(".treehere").html("");
+  tr = d3.select(".treehere")
+    .selectAll(".node")
+    .data(root.leaves());
+  tr.exit().remove();  
+  var trg = tr.enter().append("div")
+      .attr("class", "node")
+      .attr("title", function(d) { return "Country: " + d.parent.data.name + "\nTeam: " + d.parent.parent.data.name; })
+      .style("left", function(d) { return d.x0 + 270 +  "px"; })
+      .style("top", function(d) { return d.y0 + "px"; })
+      .style("width", function(d) { return d.x1 - d.x0 + "px"; })
+      .style("height", function(d) { return d.y1 - d.y0 + "px"; })
+      .style("background", function(d) { while (d.depth > 1) d = d.parent; return color(d.data.name); });
+
+  trg.append("div")
+        .attr("class", "node-label")
+        .text(function(d) { return  d.data.name +"\n" + d.parent.parent.data.name })
+      .append("div")
+        .attr("class", "node-value")
+        .text(function(d) { return format(d.value); })
+
+  trg.append("div")
+      .style("width", "150px")
+      .style("height", "150px")
+      .attr("class", "photo")
+      .style("background-image", function(d) {  return "url('" + d.data.photo + "')"; })      
+      
+
+     
+}
+
+function type(d) {
+  d.value = +d.value;
+  return d;
+}
+
+function radialPoint(x, y) {
+  return [(y = +y) * Math.cos(x -= Math.PI / 2), y * Math.sin(x)];
+}
+
+$(".change").click(function(){
+  update($(this).attr("ck"));
+  $(".change").removeClass("active");
+  $(this).addClass("active")
+})
+$("#colpeople").change(function() {
+  update($(".active").attr("ck"))
+})
+
+</script>
+
+  </body>
+
+</html>
